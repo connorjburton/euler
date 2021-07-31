@@ -1,16 +1,34 @@
-export default function fibonacci(max: number): number {
-    const terms = [1, 2];
+export function fibonacci(max: number): number {
+    if (max < 2) {
+        throw new Error('Fibonacci sequences must be at least 2 terms long');
+    }
 
+    let twoBefore = 1;
+    let oneBefore = 2;
+    let total = 2;
     // Even though we have a break in the loop i'd rather do this guard rather than while(true)
-    while (terms[terms.length - 1] < max) {
-        const len = terms.length;
-        const newTerm = terms[len - 1] + terms[len - 2];
+    while (oneBefore < max) {
+        const newTerm = oneBefore + twoBefore;
         if (newTerm > max) {
             break;
         }
+        
+        if (newTerm % 2 === 0) {
+            total += newTerm;
+        }
 
-        terms.push(newTerm);
+        twoBefore = oneBefore;
+        oneBefore = newTerm;
     }
 
-    return terms.reduce((agg, val) => val % 2 === 0 ? agg += val : agg, 0);
+    return total;
+}
+
+// Tail recursion
+export function fib2(n: number, a: number = 1, b: number = 1): number {
+    if (n <= 2) {
+        return a;
+    }
+
+    return fib2(n - 1, a + b, a);
 }
